@@ -1,9 +1,7 @@
 {
-  "name": "test",
-  "version": "1.0.0",
-  "main": "index.js",
+  "type": "commonjs",
   "scripts": {
-    "start": "node src/app.js"
+    "start": "nodemon src/app.js"
   },
   "dependencies": {
     "archiver": "^7.0.1",
