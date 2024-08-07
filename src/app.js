@@ -41,34 +41,36 @@ admin.initializeApp({
 
 const bucket = admin.storage().bucket();
 
-const saveBrowserProfile = async () => {
-  try {
-    const profilePath = path.join(__dirname, 'CustomProfile');
-    const zipPath = path.join(__dirname, 'CustomProfile.zip');
-    const output = fs.createWriteStream(zipPath);
-    const archive = archiver('zip', { zlib: { level: 9 } });
+app.get('/saveBrowserProfile', (req, res) => {
+  const saveBrowserProfile = async () => {
+    try {
+      const profilePath = path.join(__dirname, 'CustomProfile');
+      const zipPath = path.join(__dirname, 'CustomProfile.zip');
+      const output = fs.createWriteStream(zipPath);
+      const archive = archiver('zip', { zlib: { level: 9 } });
 
-    output.on('close', async () => {
-      console.log('Perfil do navegador compactado');
+      output.on('close', async () => {
+        console.log('Perfil do navegador compactado');
 
-      // Enviar o arquivo compactado para o Firebase Storage
-      await bucket.upload(zipPath, {
-        destination: 'CustomProfile.zip'
+        // Enviar o arquivo compactado para o Firebase Storage
+        await bucket.upload(zipPath, {
+          destination: 'CustomProfile.zip'
+        });
+
+        console.log('Perfil do navegador salvo no Firebase Storage');
+        fs.unlinkSync(zipPath); // Remover o arquivo zip após o envio
       });
 
-      console.log('Perfil do navegador salvo no Firebase Storage');
-      fs.unlinkSync(zipPath); // Remover o arquivo zip após o envio
-    });
+      archive.pipe(output);
+      archive.directory(profilePath, false);
+      await archive.finalize();
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
-    archive.pipe(output);
-    archive.directory(profilePath, false);
-    await archive.finalize();
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-saveBrowserProfile()
+  saveBrowserProfile()
+})
 
 
 app.get('/', async (req, res) => {

@@ -1,5 +1,4 @@
 {
-  "type": "commonjs",
   "scripts": {
     "start": "nodemon src/app.js"
   },
