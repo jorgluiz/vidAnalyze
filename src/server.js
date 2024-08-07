@@ -150,7 +150,7 @@ app.get('/', async (req, res) => {
           const tweets = await captureTweets(); // Depois, capturamos os tweets
           getChatCompletion(tweets); // Enviamos os tweets para análise de sentimento
           // console.log(tweets);
-          res.json({ messages: tweets })
+          res.send({ messages: tweets })
         } catch (error) {
           console.error('Erro ao capturar tweets:', error);
         }
