@@ -11,7 +11,7 @@
     <button onclick="buscarDados()">buscar dados</button>
     <script>
         const buscarDados = async () => {
-            const resposen = await fetch('/get-tweets')
+            const resposen = await fetch('/')
             const data = await resposen.json()
             console.log(data)
         }
