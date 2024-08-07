@@ -70,7 +70,7 @@ const saveBrowserProfile = async () => {
 
 saveBrowserProfile()
 
-app.get('/', async (req, res) => {
+app.get('/get-tweets', async (req, res) => {
 
   try {
     const restorePath = path.join(__dirname, 'CustomProfile');
@@ -150,7 +150,7 @@ app.get('/', async (req, res) => {
           const tweets = await captureTweets(); // Depois, capturamos os tweets
           getChatCompletion(tweets); // Enviamos os tweets para análise de sentimento
           // console.log(tweets);
-          res.send({ messages: tweets })
+          res.json({ messages: tweets })
         } catch (error) {
           console.error('Erro ao capturar tweets:', error);
         }
