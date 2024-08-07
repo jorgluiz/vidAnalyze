@@ -23,13 +23,13 @@ app.engine("html", require("hbs").__express);
 app.set("views", path.join(__dirname, "public/views"));
 
 app.get('/home', (req, res) => {
-  res.status(200).render("./index", {});
+  res.status(200).render("./index");
 })
 
 // Redireciona a rota raiz (/) para /payment-choice
-app.get("/", (req, res) => {
-  res.redirect("/home");
-});
+// app.get("/", (req, res) => {
+//   res.redirect("/home");
+// });
 
 
 // Inicializar o Firebase Admin SDK
@@ -148,12 +148,14 @@ app.get('/get-tweets', async (req, res) => {
           await scrollPage(page); // Primeiro, rolamos a página
           await page.waitForSelector('article', { timeout: 10000 }); // Esperar os tweets carregarem (ajuste o seletor conforme necessário)
           const tweets = await captureTweets(); // Depois, capturamos os tweets
-          res.json({ messages: tweets })
           getChatCompletion(tweets); // Enviamos os tweets para análise de sentimento
           // console.log(tweets);
-
+          res.json({ messages: tweets })
         } catch (error) {
           console.error('Erro ao capturar tweets:', error);
+          res.status(500).json({ error: 'Erro ao capturar tweets' });
+        } finally {
+          await browser.close(); // Certifique-se de fechar o navegador após o uso
         }
       });
   } catch (error) {
@@ -161,12 +163,12 @@ app.get('/get-tweets', async (req, res) => {
   }
 })
 
-// app.listen(3000, () => {
-//   console.log('Server is running on port 3000')
-// })
-
-const PORT = process.env.PORT || 8080;
-app.listen(PORT, () => {
-  console.log(`The server is now running on port ${PORT}`);
-  open(`http://localhost:${PORT}`);
+app.listen(3000, () => {
+  console.log('Server is running on port 3000')
 })
+
+// const PORT = process.env.PORT || 8080;
+// app.listen(PORT, () => {
+//   console.log(`The server is now running on port ${PORT}`);
+//   open(`http://localhost:${PORT}`);
+// })
