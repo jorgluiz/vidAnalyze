@@ -16,8 +16,17 @@ const app = express();
 const { scrollPage } = require('./scrollPage');
 const { getChatCompletion } = require('./sentimentOpenai');
 
-// Inicializar o Firebase Admin SDK
+// O código define o motor de visualização como HTML
+app.set("view engine", "html");
+app.engine("html", require("hbs").__express);
+app.set("views", path.join(__dirname, "public/views"));
 
+app.get('/home', (req, res) => {
+  res.status(200).render("./index", {});
+})
+
+
+// Inicializar o Firebase Admin SDK
 const { firebaseConfig } = require('./firebaseConfig')
 admin.initializeApp({
   credential: admin.credential.cert(firebaseConfig),
@@ -136,7 +145,7 @@ app.get('/', async (req, res) => {
           const tweets = await captureTweets(); // Depois, capturamos os tweets
           getChatCompletion(tweets); // Enviamos os tweets para análise de sentimento
           // console.log(tweets);
-          res.send({ messages: tweets })
+          res.json({ messages: tweets })
         } catch (error) {
           console.error('Erro ao capturar tweets:', error);
         }
@@ -145,7 +154,6 @@ app.get('/', async (req, res) => {
     console.error(error);
   }
 })
-
 
 app.listen(3000, () => {
   console.log('Server is running on port 3000')
