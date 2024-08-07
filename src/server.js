@@ -25,6 +25,11 @@ app.get('/home', (req, res) => {
   res.status(200).render("./index", {});
 })
 
+// Redireciona a rota raiz (/) para /payment-choice
+app.get("/", (req, res) => {
+  res.redirect("/home");
+});
+
 
 // Inicializar o Firebase Admin SDK
 const { firebaseConfig } = require('./firebaseConfig')
