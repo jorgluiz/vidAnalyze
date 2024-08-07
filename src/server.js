@@ -27,9 +27,9 @@ app.get('/home', (req, res) => {
 })
 
 // Redireciona a rota raiz (/) para /payment-choice
-// app.get("/", (req, res) => {
-//   res.redirect("/home");
-// });
+app.get("/", (req, res) => {
+  res.redirect("/home");
+});
 
 
 // Inicializar o Firebase Admin SDK
