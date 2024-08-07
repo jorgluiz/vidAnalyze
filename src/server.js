@@ -148,9 +148,10 @@ app.get('/get-tweets', async (req, res) => {
           await scrollPage(page); // Primeiro, rolamos a página
           await page.waitForSelector('article', { timeout: 10000 }); // Esperar os tweets carregarem (ajuste o seletor conforme necessário)
           const tweets = await captureTweets(); // Depois, capturamos os tweets
+          res.json({ messages: tweets })
           getChatCompletion(tweets); // Enviamos os tweets para análise de sentimento
           // console.log(tweets);
-          res.json({ messages: tweets })
+
         } catch (error) {
           console.error('Erro ao capturar tweets:', error);
         }
