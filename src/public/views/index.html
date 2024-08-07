@@ -11,9 +11,13 @@
     <button onclick="buscarDados()">buscar dados</button>
     <script>
         const buscarDados = async () => {
-            const resposen = await fetch('/')
-            const data = await resposen.json()
-            console.log(data)
+            try {
+                const resposen = await fetch('/')
+                const data = await resposen.json()
+                console.log(data)
+            } catch (error) {
+                console.log("error", error)
+            }
         }
     </script>
 </body>
