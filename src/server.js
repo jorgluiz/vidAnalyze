@@ -7,6 +7,7 @@ const fs = require('fs');
 const archiver = require('archiver');
 const unzipper = require('unzipper');
 const path = require('path');
+const open = require('open');
 
 const admin = require('firebase-admin');
 
@@ -160,6 +161,12 @@ app.get('/', async (req, res) => {
   }
 })
 
-app.listen(3000, () => {
-  console.log('Server is running on port 3000')
+// app.listen(3000, () => {
+//   console.log('Server is running on port 3000')
+// })
+
+const PORT = process.env.PORT || 8080;
+app.listen(PORT, () => {
+  console.log(`The server is now running on port ${PORT}`);
+  open(`http://localhost:${PORT}`);
 })
