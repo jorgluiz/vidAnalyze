@@ -1,7 +1,8 @@
 {
   "type": "module",
+  "main": "src/app.js",
   "scripts": {
-    "s": "nodemon src/server.js"
+    "start": "node src/app.js"
   },
   "dependencies": {
     "archiver": "^7.0.1",
