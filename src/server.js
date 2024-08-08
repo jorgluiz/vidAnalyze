@@ -70,7 +70,7 @@ const saveBrowserProfile = async () => {
 
 saveBrowserProfile()
 
-app.get('/', async (req, res) => {
+app.get('/get-twitter', async (req, res) => {
 
   try {
     const restorePath = path.join(__dirname, 'CustomProfile');

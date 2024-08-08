@@ -12,7 +12,7 @@
     <script>
         const buscarDados = async () => {
             try {
-                const resposen = await fetch('/')
+                const resposen = await fetch('/get-twitter')
                 const data = await resposen.json()
                 console.log(data)
             } catch (error) {
