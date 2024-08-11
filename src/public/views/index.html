@@ -20,14 +20,10 @@
             try {
                 const resposen = await fetch('/get-twitter')
                 const data = await resposen.json()
-                console.log(data)
-                // Adiciona elementos <p> dentro da nova div
-                // for (let i = 0; i <= data.messages.length; i++) {  // Por exemplo, 3 parágrafos
-                //     const p = document.createElement('p');
-                //     p.textContent = `Este é o parágrafo ${i}`;
-                //     newDiv.appendChild(p);
-                // }
 
+                newDiv.innerHTML = data
+                // Adiciona a nova div ao body
+                body.appendChild(newDiv);
             } catch (error) {
                 console.log("error", error)
             }
