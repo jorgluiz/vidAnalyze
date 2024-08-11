@@ -75,15 +75,16 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY
 });
 
-async function getChatCompletion(datas) {
-  const tweets= datas
+function getChatCompletion(data) {
+  return new Promise(async (resolve, reject) => {
+    const tweets = data
 
-  tweets.unshift(newObject);
+    tweets.unshift(newObject);
 
-const updatedArray = tweets.map(item => ({
-  role: "user",
-  ...item
-}))
+    const updatedArray = tweets.map(item => ({
+      role: "user",
+      ...item
+    }))
 
     try {
       const response = await openai.chat.completions.create({
@@ -93,23 +94,25 @@ const updatedArray = tweets.map(item => ({
 
       let content = response.choices[0].message.content
 
-         // Separar o conteúdo em parágrafos
-    let paragraphs = content.split('\n\n');
+      // Separar o conteúdo em parágrafos
+      let paragraphs = content.split('\n\n');
 
-    // Criar os elementos <p> para cada parágrafo
-    let htmlContent = paragraphs.map(paragraph => {
-      // Substitui quebras de linha dentro de parágrafos por <br> para manter a estrutura
-      let formattedParagraph = paragraph.replace(/\n/g, '<br>');
-      return `<p>${formattedParagraph}</p>`;
-    }).join('\n');
+      // Criar os elementos <p> para cada parágrafo
+      let htmlContent = paragraphs.map(paragraph => {
+        // Substitui quebras de linha dentro de parágrafos por <br> para manter a estrutura
+        let formattedParagraph = paragraph.replace(/\n/g, '<br>');
+        return `<p>${formattedParagraph}</p>`;
+      }).join('\n');
 
-    console.log(htmlContent);
+      resolve(htmlContent)
 
 
     } catch (error) {
       console.error("Erro na solicitação para a API:", error);
+      reject(error);  // Rejeita a Promise com o erro
     }
-  }
-  
- 
+  })
+}
+
+
 module.exports = { getChatCompletion }
