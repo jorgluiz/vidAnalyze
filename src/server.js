@@ -107,7 +107,7 @@ app.get('/get-twitter', async (req, res) => {
         const page = await browser.newPage();
 
         // Navegar para o perfil do Twitter
-        await page.goto('https://x.com/elonmusk', { waitUntil: 'networkidle2' });
+        await page.goto('https://x.com/mspbra', { waitUntil: 'networkidle2' });
 
         // Função para capturar tweets
         const captureTweets = async () => {
@@ -148,7 +148,6 @@ app.get('/get-twitter', async (req, res) => {
           await scrollPage(page); // Primeiro, rolamos a página
           await page.waitForSelector('article', { timeout: 10000 }); // Esperar os tweets carregarem (ajuste o seletor conforme necessário)
           const tweets = await captureTweets(); // Depois, capturamos os tweets
-
           const analise = await getChatCompletion(tweets); // Enviamos os tweets para análise de sentimento
           // console.log(tweets);
           res.json(analise);

@@ -5,27 +5,80 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <style>
+        /* Estilos para o círculo de carregamento */
+        #loadingContainer {
+            display: none;
+            /* Inicialmente oculto */
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 50px;
+            height: 50px;
+        }
+
+        #loadingCircle {
+            width: 100%;
+            height: 100%;
+            border: 6px solid #f3f3f3;
+            /* Cor de fundo */
+            border-top: 6px solid #3498db;
+            /* Cor do círculo animado */
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        /* Animação de rotação com variação de opacidade */
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+                opacity: 1;
+            }
+
+            50% {
+                transform: rotate(180deg);
+                opacity: 0.2;
+                /* Quase transparente */
+            }
+
+            100% {
+                transform: rotate(360deg);
+                opacity: 1;
+            }
+        }
+    </style>
 </head>
 
 <body>
     <button onclick="buscarDados()">buscar dados</button>
+
+    <!-- Container para o círculo de carregamento -->
+    <div id="loadingContainer">
+        <div id="loadingCircle"></div>
+    </div>
     <script>
         const buscarDados = async () => {
-            // Seleciona o body
             const body = document.querySelector('body');
-
-            // Cria uma nova div
             const newDiv = document.createElement('div');
 
-            try {
-                const resposen = await fetch('/get-twitter')
-                const data = await resposen.json()
+            // Seleciona o container do círculo de carregamento
+            const loadingContainer = document.getElementById('loadingContainer');
 
-                newDiv.innerHTML = data
-                // Adiciona a nova div ao body
+            // Exibe o círculo de carregamento
+            loadingContainer.style.display = 'block';
+
+            try {
+                const response = await fetch('/get-twitter');
+                const data = await response.json();
+
+                newDiv.innerHTML = data;
                 body.appendChild(newDiv);
             } catch (error) {
-                console.log("error", error)
+                console.log("error", error);
+            } finally {
+                // Oculta o círculo de carregamento após a finalização da operação
+                loadingContainer.style.display = 'none';
             }
         }
     </script>
