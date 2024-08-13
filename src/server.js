@@ -107,7 +107,7 @@ app.get('/get-twitter', async (req, res) => {
         const page = await browser.newPage();
 
         // Navegar para o perfil do Twitter
-        await page.goto('https://x.com/mspbra', { waitUntil: 'networkidle2' });
+        await page.goto('https://x.com/meelonmuskusa', { waitUntil: 'networkidle2' });
 
         // Função para capturar tweets
         const captureTweets = async () => {

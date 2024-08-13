@@ -58,9 +58,13 @@
         <div id="loadingCircle"></div>
     </div>
     <script>
+        const body = document.querySelector('body');
+        const newDiv = document.createElement('div');
+        body.appendChild(newDiv);
+
         const buscarDados = async () => {
-            const body = document.querySelector('body');
-            const newDiv = document.createElement('div');
+            // Limpar o conteúdo de newDiv antes de adicionar novos dados
+            newDiv.innerHTML = '';
 
             // Seleciona o container do círculo de carregamento
             const loadingContainer = document.getElementById('loadingContainer');
@@ -73,7 +77,6 @@
                 const data = await response.json();
 
                 newDiv.innerHTML = data;
-                body.appendChild(newDiv);
             } catch (error) {
                 console.log("error", error);
             } finally {
