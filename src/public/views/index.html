@@ -53,10 +53,15 @@
         
         img {
           display: block;
-          margin: 50% auto;
+          margin: 0 auto;
           width: 100%; /* A imagem ocupará 100% da largura do seu container */
           max-width: 600px; /* A imagem não ultrapassará 600px de largura */
           height: auto; /* Mantém a proporção da imagem */
+          border: 1px solid #111;
+
+          @media (max-width: 800px) {
+          margin: 50% auto;
+          }
         }
     </style>
 </head>
