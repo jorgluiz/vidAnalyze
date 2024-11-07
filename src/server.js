@@ -92,7 +92,7 @@ app.post('/get-twitter', async (req, res) => {
 
         // Use o perfil restaurado com o Puppeteer
         const browser = await puppeteer.launch({
-          headless: false, // Define se o navegador deve rodar em modo headless (sem interface gráfica). No caso de servidores.
+          headless: true, // Define se o navegador deve rodar em modo headless (sem interface gráfica). No caso de servidores.
           defaultViewport: null, // Define a viewport padrão como null, o que permite que o navegador use o tamanho de viewport do sistema ou da última sessão.
           args: [
             '--no-sandbox', // Executa o Chromium sem sandboxing, necessário para que funcione em ambientes restritos como o Heroku.
