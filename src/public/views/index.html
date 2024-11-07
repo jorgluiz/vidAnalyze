@@ -67,14 +67,22 @@
           margin: 50% auto;
           }
         }
+
+        .container {
+          display: flex;
+          justify-content: center;
+          margin: 30px 30px;
+        }
     </style>
 </head>
 
 <body>
-  <label for="fname">conta no Twitter:</label>
-    <div>
+    <div class="container">
+      <div>
+      <label for="fname">conta no Twitter:</label>
       <input type="text" id="inputData" placeholder="exemplo: CNNBrasil">
-    <button onclick="buscarDados()">buscar dados</button>
+      <button onclick="buscarDados()">buscar dados</button>
+      </div>
     </div>
     <div class="img-responsive">
       <img src="../images/analyze-feelings.png" alt="">
