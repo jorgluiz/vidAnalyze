@@ -47,10 +47,15 @@
                 opacity: 1;
             }
         }
+        label {
+          display: block;
+        }
     </style>
 </head>
 
 <body>
+  <label for="fname">conta no Twitter:</label>
+    <input type="text" id="inputData" placeholder="exemplo: CNNBrasil">
     <button onclick="buscarDados()">buscar dados</button>
 
     <!-- Container para o círculo de carregamento -->
@@ -63,24 +68,27 @@
         body.appendChild(newDiv);
 
         const buscarDados = async () => {
-            // Limpar o conteúdo de newDiv antes de adicionar novos dados
             newDiv.innerHTML = '';
-
-            // Seleciona o container do círculo de carregamento
             const loadingContainer = document.getElementById('loadingContainer');
-
-            // Exibe o círculo de carregamento
             loadingContainer.style.display = 'block';
 
-            try {
-                const response = await fetch('/get-twitter');
-                const data = await response.json();
+            const contaNoTwitter = document.getElementById('inputData').value; // Captura o valor do input
 
-                newDiv.innerHTML = data;
+            try {
+                // Envia o valor do input como JSON no corpo da requisição
+                const response = await fetch('/get-twitter', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ contaNoTwitter })
+                });
+
+                const data = await response.json();
+                newDiv.innerHTML = JSON.stringify(data); // Exibe a resposta
             } catch (error) {
-                console.log("error", error);
+                console.log("Erro:", error);
             } finally {
-                // Oculta o círculo de carregamento após a finalização da operação
                 loadingContainer.style.display = 'none';
             }
         }

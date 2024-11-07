@@ -16,6 +16,7 @@ puppeteer.use(StealthPlugin());
 const app = express();
 const { scrollPage } = require('./scrollPage');
 const { getChatCompletion } = require('./sentimentOpenai');
+app.use(express.json()); // Middleware para análise de solicitações JSON
 
 // O código define o motor de visualização como HTML
 app.set("view engine", "html");
@@ -70,7 +71,9 @@ const saveBrowserProfile = async () => {
 
 saveBrowserProfile()
 
-app.get('/get-twitter', async (req, res) => {
+app.post('/get-twitter', async (req, res) => {
+  const { contaNoTwitter } = req.body; // Obtém os dados do corpo da requisição
+  console.log(contaNoTwitter)
 
   try {
     const restorePath = path.join(__dirname, 'CustomProfile');
@@ -89,7 +92,7 @@ app.get('/get-twitter', async (req, res) => {
 
         // Use o perfil restaurado com o Puppeteer
         const browser = await puppeteer.launch({
-          headless: true, // Define se o navegador deve rodar em modo headless (sem interface gráfica). No caso de servidores, geralmente é true
+          headless: false, // Define se o navegador deve rodar em modo headless (sem interface gráfica). No caso de servidores.
           defaultViewport: null, // Define a viewport padrão como null, o que permite que o navegador use o tamanho de viewport do sistema ou da última sessão.
           args: [
             '--no-sandbox', // Executa o Chromium sem sandboxing, necessário para que funcione em ambientes restritos como o Heroku.
@@ -107,7 +110,17 @@ app.get('/get-twitter', async (req, res) => {
         const page = await browser.newPage();
 
         // Navegar para o perfil do Twitter
-        await page.goto('https://x.com/meelonmuskusa', { waitUntil: 'networkidle2' });
+        await page.goto(`https://x.com/${contaNoTwitter}`, { waitUntil: 'networkidle2' });
+
+        // Verificar se a conta existe ou está acessível
+        const accountNotFound = await page.evaluate(() => {
+          return document.body.innerText.includes('This account doesn’t exist') || document.body.innerText.includes('Essa conta não existe') || document.body.innerText.includes('Page not found')
+        });
+
+        if (accountNotFound) {
+          await browser.close();
+          return res.status(404).json({ error: 'Perfil do Twitter não encontrado' });
+        }
 
         // Função para capturar tweets
         const captureTweets = async () => {
@@ -153,7 +166,7 @@ app.get('/get-twitter', async (req, res) => {
           res.json(analise);
         } catch (error) {
           console.error('Erro ao capturar tweets:', error);
-          res.status(500).json({ error: 'Erro ao capturar tweets' });
+          res.status(404).json({ error: 'Erro ao capturar tweets' });
         } finally {
           await browser.close(); // Certifique-se de fechar o navegador após o uso
         }
