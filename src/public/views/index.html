@@ -50,13 +50,26 @@
         label {
           display: block;
         }
+        
+        img {
+          display: block;
+          margin: 50% auto;
+          width: 100%; /* A imagem ocupará 100% da largura do seu container */
+          max-width: 600px; /* A imagem não ultrapassará 600px de largura */
+          height: auto; /* Mantém a proporção da imagem */
+        }
     </style>
 </head>
 
 <body>
   <label for="fname">conta no Twitter:</label>
-    <input type="text" id="inputData" placeholder="exemplo: CNNBrasil">
+    <div>
+      <input type="text" id="inputData" placeholder="exemplo: CNNBrasil">
     <button onclick="buscarDados()">buscar dados</button>
+    </div>
+    <div class="img-responsive">
+      <img src="../images/analyze-feelings.png" alt="">
+    </div>
 
     <!-- Container para o círculo de carregamento -->
     <div id="loadingContainer">

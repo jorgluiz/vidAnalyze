@@ -22,6 +22,7 @@ app.use(express.json()); // Middleware para análise de solicitações JSON
 app.set("view engine", "html");
 app.engine("html", require("hbs").__express);
 app.set("views", path.join(__dirname, "public/views"));
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/home', (req, res) => {
   res.status(200).render("./index");
