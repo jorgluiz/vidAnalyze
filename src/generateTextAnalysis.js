@@ -3,7 +3,7 @@ require('dotenv').config();
 
 const newObject = {
   role: "system",
-  content: "Coletar dados de mídias sociais para análise de sentimentos e tendencias. positiva, negativa e neutra"
+  content: "Resumo sobre o que texto aborda, o que texto destaca e se hover agluma solução"
 };
 
 // const tweets = [
@@ -75,44 +75,60 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY
 });
 
-function getChatCompletion(data) {
+const MAX_TOKENS = 1024; // Defina um limite seguro para cada bloco (ajuste conforme necessário).
+
+function splitText(text, maxTokens) {
+  const parts = [];
+  let currentPart = "";
+
+  text.split(" ").forEach(word => {
+    if ((currentPart + word).length > maxTokens) {
+      parts.push(currentPart.trim());
+      currentPart = word + " ";
+    } else {
+      currentPart += word + " ";
+    }
+  });
+
+  if (currentPart.trim().length > 0) {
+    parts.push(currentPart.trim());
+  }
+
+  return parts;
+}
+
+// Divide o texto em blocos menores para respeitar o limite de tokens.
+module.exports = async function splitTextIntoChunks(data) {
   return new Promise(async (resolve, reject) => {
-    const tweets = data
-
-    tweets.unshift(newObject);
-
-    const updatedArray = tweets.map(item => ({
-      role: "user",
-      ...item
-    }))
-
     try {
-      const response = await openai.chat.completions.create({
-        model: "gpt-4o",
-        messages: updatedArray
-      });
+      const transcribedVideo = data;
+      const parts = splitText(transcribedVideo, MAX_TOKENS);
 
-      let content = response.choices[0].message.content
+      let finalResponse = "";
 
-      // Separar o conteúdo em parágrafos
-      let paragraphs = content.split('\n\n');
+      for (const part of parts) {
+        const updatedArray = [
+          newObject,
+          {
+            role: "user",
+            content: part
+          }
+        ];
 
-      // Criar os elementos <p> para cada parágrafo
-      let htmlContent = paragraphs.map(paragraph => {
-        // Substitui quebras de linha dentro de parágrafos por <br> para manter a estrutura
-        let formattedParagraph = paragraph.replace(/\n/g, '<br>');
-        return `<p>${formattedParagraph}</p>`;
-      }).join('\n');
+        const response
+          = await openai.chat.completions.create({
+            model: "gpt-4o",
+            messages: updatedArray
+          });
 
-      resolve(htmlContent)
+        const content = response.choices[0].message.content;
+        finalResponse += content + "\n"; // Concatena as respostas
+      }
 
-
+      resolve(finalResponse.trim());
     } catch (error) {
       console.error("Erro na solicitação para a API:", error);
       reject(error);  // Rejeita a Promise com o erro
     }
   })
 }
-
-
-module.exports = { getChatCompletion }
