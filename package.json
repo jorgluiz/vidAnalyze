@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "start": "nodemon src/server.js"
+    "start": "node src/server.js"
   },
   "dependencies": {
     "archiver": "^7.0.1",
