@@ -1,0 +1,8 @@
+[phases.setup]
+runtime = "nodejs"
+
+[phases.setup.env]
+PYTHON = "python3"
+
+[phases.setup.commands]
+- "apt-get update && apt-get install -y python3"
