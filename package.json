@@ -15,6 +15,7 @@
     "puppeteer": "13.0.0",
     "puppeteer-extra": "3.1.18",
     "puppeteer-extra-plugin-stealth": "2.7.10",
-    "unzipper": "^0.12.2"
+    "unzipper": "^0.12.2",
+    "youtube-dl-exec": "^3.0.10"
   }
 }
