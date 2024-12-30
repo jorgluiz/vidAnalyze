@@ -1,20 +1,31 @@
-const express = require('express');
-// const puppeteer = require('puppeteer');
-require('dotenv').config();
-const fs = require('fs');
-const path = require('path');
+import http from "http";
+import express from 'express'
 const app = express();
-const youtubedl = require('youtube-dl-exec');
-const splitTextIntoChunks = require('./generateTextAnalysis')
-const transcribeAudioToText = require('./transcribeAudioToText')
+import dotenv from "dotenv";
+dotenv.config();
+import fs from 'fs'
+import path from 'path'
+import hbs from "hbs";
+import youtubedl from 'youtube-dl-exec'
+import splitTextIntoChunks from './generateTextAnalysis.js'
+import transcribeAudioToText from './transcribeAudioToText.js'
+import * as logger from "./utils/logger.js";
 
 app.use(express.json()); // Middleware para análise de solicitações JSON
+const server = http.createServer(app);
 
-// O código define o motor de visualização como HTML
+// Configuração do Handlebars para renderizar HTML
+app.engine("html", hbs.__express);
 app.set("view engine", "html");
-app.engine("html", require("hbs").__express);
-app.set("views", path.join(__dirname, "public/views"));
-app.use(express.static(path.join(__dirname, 'public')));
+app.set("views", path.join(path.resolve(), "public/views"));
+
+// Configuração para arquivos estáticos
+app.use(express.static(path.join(path.resolve(), "public")));
+
+// app.set("view engine", "html");
+// app.engine("html", require("hbs").__express);
+// app.set("views", path.join(__dirname, "public/views"));
+// app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/home', (req, res) => {
   res.status(200).render("./index");
@@ -60,7 +71,7 @@ app.post('/analise-video', async (req, res) => {
   }
 })
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`App listening on port ${PORT}`);
+const PORT = process.env.PORT || 3003;
+server.listen(PORT, () => {
+  logger.info(`Server running on port ${PORT}`);
 });

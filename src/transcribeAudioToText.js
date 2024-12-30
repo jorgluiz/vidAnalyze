@@ -1,11 +1,12 @@
-const fs = require("fs")
-const path = require("path")
-const OpenAI = require("openai")
-require('dotenv').config();
+import fs from "fs"
+import path from "path"
+import OpenAI from "openai"
+import dotenv from "dotenv";
+dotenv.config();
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
-module.exports = async function transcribeAudioToText() {
+export default async function transcribeAudioToText() {
   const filePath = path.join(__dirname, "./downloads/audio.mp3");
 
   const audioStream = fs.createReadStream(filePath);
